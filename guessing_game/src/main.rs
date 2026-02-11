@@ -27,9 +27,12 @@ fn main() {
 
         let guess = guess.to_ascii_lowercase();
 
-        // if guess.trim() == "quit" || guess.trim() == "q" {
+        // Check if the user want to quit the game
+        // The user can quit by typing "quit" or "q"
+        // Because of the previous conversion, this is case insensitive.
+
         if ["quit", "q"].contains(&guess.trim()) {
-            println!("{}", "Quiting program...".red());
+            println!("{}", "Quitting program...".red());
             return;
         }
 
