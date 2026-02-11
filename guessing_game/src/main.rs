@@ -12,31 +12,40 @@ fn main() {
     let mut rng = rand::rng();
     let secret: u32 = rng.random_range(0..=100);
 
-    println!("The secret is: {}", secret);
-
     println!("Please enter a number between 0 and 100");
 
-    // Creating a guess variable to get the input.
-    // In rust we need to always handle all cases
-    // --> we use expect to handle errors.
+    loop {
+        // Creating a guess variable to get the input.
+        // In rust we need to always handle all cases
+        // --> we use expect to handle errors.
 
-    let mut guess = String::new();
-    io::stdin()
-        .read_line(&mut guess)
-        .expect("The input was not received correctly");
+        let mut guess = String::new();
+        io::stdin()
+            .read_line(&mut guess)
+            .expect("The input was not received correctly");
 
-    // We need to parse the input to an number to compare
+        // We need to parse the input to an number to compare
+        // To do this, we use a match statement so that on error
+        // the program doesn't panic.
 
-    let guess: u32 = guess
-        .trim()
-        .parse()
-        .expect("Unable to parse the given input to a number");
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Invalid input! Try again.");
+                continue;
+            }
+        };
 
-    println!("Your guess: {}", guess);
+        // Comparing is done by the cmp crate. When the number
+        // is guessed, break out of the main gameloop.
 
-    match guess.cmp(&secret) {
-        Ordering::Less => println!("Too small!"),
-        Ordering::Greater => println!("Too big!"),
-        Ordering::Equal => println!("PERFECT! Congratulations :D"),
+        match guess.cmp(&secret) {
+            Ordering::Less => println!("Too small! Try again."),
+            Ordering::Greater => println!("Too big! Try again."),
+            Ordering::Equal => {
+                println!("PERFECT! Congratulations :D");
+                return;
+            }
+        }
     }
 }
